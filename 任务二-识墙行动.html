@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>让改革创新成为青春远航的动力 - 识墙辨墙行动</title>
+    <style>
+        :root {
+            --wall-color: rgba(128, 128, 128, 0.3);
+            --brick-color: rgba(100, 100, 100, 0.4);
+        }
+
+        body {
+            font-family: "楷体", "KaiTi", sans-serif;
+            background: linear-gradient(150deg, #87CEEB 0%, #E0F6FF 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1E3799;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .wall-system {
+            display: flex;
+            margin: 40px 0;
+        }
+
+        .wall-column {
+            perspective: 1000px;
+            position: relative;
+            flex: 1;
+            min-height: 600px;
+        }
+
+        /* 移除墙列之间的间隙 */
+        .wall-column + .wall-column {
+            margin-left: -1px;
+        }
+
+        .brick {
+            background: var(--brick-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            /* 调整砖头的内边距以减小大小 */
+            padding: 8px;
+            margin-bottom: -1px;
+            transform-style: preserve-3d;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .brick::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            transform: translateZ(-3px);
+        }
+
+        .brick p {
+            margin: 0;
+            color: #333;
+            font-size: 12px;
+            line-height: 1.2;
+            transform: translateZ(3px);
+        }
+
+        .wall-label {
+            text-align: center;
+            font-size: 18px;
+            color: #1E3799;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .pass-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: gold;
+            padding: 30px 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 100;
+        }
+
+        .pass-card.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .passed-students {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>让改革创新成为青春远航的动力 - 识墙辨墙行动</h1>
+
+        <div class="wall-system">
+            <div class="wall-column">
+                <div class="wall-label">人类之墙</div>
+                <div id="human-wall"></div>
+            </div>
+            <div class="wall-column">
+                <div class="wall-label">中华民族之墙</div>
+                <div id="chinese-wall"></div>
+            </div>
+            <div class="wall-column">
+                <div class="wall-label">青年之墙</div>
+                <div id="youth-wall"></div>
+            </div>
+            <div class="wall-column">
+                <div class="wall-label">专业之墙</div>
+                <div id="major-wall"></div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h2>请输入你的信息和各领域发现的挑战</h2>
+            <form id="brick-form">
+                <input type="text" id="student-name" placeholder="输入你的姓名..." required>
+                <select id="category" required>
+                    <option value="">选择领域</option>
+                    <option value="human">人类</option>
+                    <option value="chinese">中华民族</option>
+                    <option value="youth">青年</option>
+                    <option value="major">专业</option>
+                </select>
+                <input type="text" id="challenge" placeholder="输入你发现的挑战..." required>
+                <button type="submit">砌入高墙</button>
+            </form>
+        </div>
+
+        <div class="pass-card" id="passCard">
+            <h2>🎉 慧眼密钥卡获取成功！</h2>
+            <p id="pass-student-name"></p>
+            <p>你已识破四面高墙，获得突破之力！</p>
+        </div>
+
+        <div class="passed-students" id="passedStudents">
+            <h3>已通关学生名单</h3>
+            <ul id="student-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const walls = {
+            human: { element: document.getElementById('human-wall'), count: 0 },
+            chinese: { element: document.getElementById('chinese-wall'), count: 0 },
+            youth: { element: document.getElementById('youth-wall'), count: 0 },
+            major: { element: document.getElementById('major-wall'), count: 0 }
+        };
+        const existingChallenges = new Set();
+        const studentProgress = {};
+
+        document.getElementById('brick-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const studentName = document.getElementById('student-name').value.trim();
+            const category = document.getElementById('category').value;
+            const challenge = document.getElementById('challenge').value.trim();
+
+            if (!studentName || !category || !challenge) return;
+            if (existingChallenges.has(challenge)) {
+                alert('该挑战已被提出，请发现新问题！');
+                return;
+            }
+
+            const wall = walls[category];
+            if (wall.count >= 5) {
+                alert('该领域已收集满5个挑战！');
+                return;
+            }
+
+            // 创建砖块
+            const brick = document.createElement('div');
+            brick.className = 'brick';
+            // 在砖头部分展示问题提出的学生姓名
+            brick.innerHTML = `<p><strong>提出者: ${studentName}</strong><br>${challenge}</p>`;
+            // 砖头由下而上堆积
+            wall.element.appendChild(brick);
+
+            // 更新状态
+            wall.count++;
+            existingChallenges.add(challenge);
+
+            if (!studentProgress[studentName]) {
+                studentProgress[studentName] = 0;
+            }
+            studentProgress[studentName]++;
+
+            // 检查通关条件
+            if (studentProgress[studentName] >= 5) {
+                document.getElementById('pass-student-name').textContent = `恭喜 ${studentName} 同学`;
+                const passCard = document.getElementById('passCard');
+                passCard.classList.add('show');
+
+                const studentList = document.getElementById('student-list');
+                const listItem = document.createElement('li');
+                listItem.textContent = studentName;
+                studentList.appendChild(listItem);
+
+                // 1秒后隐藏通关卡片
+                setTimeout(() => {
+                    passCard.classList.remove('show');
+                }, 1000);
+            }
+
+            this.reset();
+        });
+    </script>
+</body>
+
+</html>
