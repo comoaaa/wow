@@ -140,6 +140,7 @@
         }
 
         .passed-students {
+            display: none;
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -151,9 +152,15 @@
 
         /* 媒体查询，当屏幕宽度小于 600px 时调整样式 */
         @media (max-width: 600px) {
-            .passed-students {
-                position: static;
-                margin-top: 20px;
+            .control-panel form input,
+            .control-panel form select {
+                width: 100%;
+                align-self: flex-start;
+            }
+
+            .control-panel form button {
+                width: 100%;
+                align-self: flex-start;
             }
         }
     </style>
@@ -219,6 +226,8 @@
         };
         const existingChallenges = new Set();
         const studentProgress = {};
+        const passedStudentsElement = document.getElementById('passedStudents');
+        const studentList = document.getElementById('student-list');
 
         document.getElementById('brick-form').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -262,10 +271,14 @@
                 const passCard = document.getElementById('passCard');
                 passCard.classList.add('show');
 
-                const studentList = document.getElementById('student-list');
                 const listItem = document.createElement('li');
                 listItem.textContent = studentName;
                 studentList.appendChild(listItem);
+
+                // 显示已通关名单
+                if (studentList.children.length > 0) {
+                    passedStudentsElement.style.display = 'block';
+                }
 
                 // 1秒后隐藏通关卡片
                 setTimeout(() => {
