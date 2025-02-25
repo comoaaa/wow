@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,70 +10,88 @@
             font-family: "楷体", "KaiTi", sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #87CEEB; /* 天蓝色背景 */
+            background-color: #87CEEB;
+            /* 天蓝色背景 */
+            position: relative;
         }
+
         .container {
             width: 80%;
             margin: 20px auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9); /* 半透明白色容器 */
+            background-color: rgba(255, 255, 255, 0.9);
+            /* 半透明白色容器 */
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
+
         h1 {
             text-align: center;
-            color: #1E3799; /* 深蓝色标题 */
+            color: #1E3799;
+            /* 深蓝色标题 */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .timeline {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-top: 20px;
         }
+
         .event {
             width: 30%;
             background-color: inherit;
             transition: transform 0.3s;
         }
+
         .event:hover {
             transform: scale(1.02);
         }
+
         .content {
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.95); /* 更通透的事件背景 */
+            background-color: rgba(255, 255, 255, 0.95);
+            /* 更通透的事件背景 */
             border-radius: 6px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .content h2 {
             margin-top: 0;
             color: #1E3799;
             border-bottom: 2px solid #87CEEB;
             padding-bottom: 5px;
         }
+
         .content p {
             margin: 0;
             color: #666;
         }
+
         .form-container {
             margin-top: 20px;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 6px;
         }
+
         .form-container label {
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
             color: #1E3799;
         }
-        .form-container input, .form-container select {
+
+        .form-container input,
+        .form-container select {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         .form-container button {
             padding: 10px 20px;
             background-color: #1E3799;
@@ -82,9 +101,11 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .form-container button:hover {
             background-color: #4A69BD;
         }
+
         .pass-card {
             display: none;
             margin-top: 20px;
@@ -95,9 +116,23 @@
             font-size: 1.2em;
             color: #333;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            /* 添加过渡效果 */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .pass-list {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px; /* 增大内边距 */
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-size: 1.2em; /* 放大字体 */
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>让改革创新成为青春远航的动力</h1>
@@ -125,18 +160,18 @@
             <h2>任务一：获取礼物密钥卡</h2>
             <form id="event-form">
                 <label for="student-name">学生姓名：</label>
-                <input type="text" id="student-name" name="student-name" required>
-                
+                <input type="text" id="student-name" name="student-name" required maxlength="20">
+
                 <label for="time-period">选择时间节点：</label>
                 <select id="time-period" name="time-period" required>
                     <option value="pre-1949">新中国成立前</option>
                     <option value="pre-1978">改革开放前</option>
                     <option value="post-1978">改革开放后</option>
                 </select>
-                
+
                 <label for="event">选择事件：</label>
-                <input type="text" id="event" name="event" required>
-                
+                <input type="text" id="event" name="event" required maxlength="100">
+
                 <button type="submit">提交</button>
             </form>
         </div>
@@ -145,38 +180,29 @@
             <p>你已完成任务一挑战，获得这张精美的通关卡！</p>
         </div>
     </div>
+    <div class="pass-list" id="pass-list">
+        <p>恭喜以下同学通关：</p>
+    </div>
 
     <script>
         const colors = ['#FF6347', '#4682B4', '#32CD32', '#FFD700', '#BA55D3', '#2E8B57', '#FF8C00', '#6495ED'];
         const studentEvents = {};
         let totalSubmissions = 0;
+        const passedStudents = [];
 
-        document.getElementById('event-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const studentName = document.getElementById('student-name').value.trim();
-            const timePeriod = document.getElementById('time-period').value;
-            const eventText = document.getElementById('event').value.trim();
-            
-            // 检查重复内容
+        // 封装检查重复内容的函数
+        function isDuplicate(studentName, eventText) {
             const existingEvents = document.querySelectorAll(`#pre-1949-events p, #pre-1978-events p, #post-1978-events p`);
             for (let p of existingEvents) {
                 if (p.textContent === `${studentName}: ${eventText}`) {
-                    alert('您输入的内容已存在，请输入不同的内容！');
-                    return;
+                    return true;
                 }
             }
+            return false;
+        }
 
-            // 为同一学生分配相同颜色
-            let color;
-            if (studentEvents[studentName]) {
-                color = studentEvents[studentName].color;
-                studentEvents[studentName].count++;
-            } else {
-                color = colors[Math.floor(Math.random() * colors.length)];
-                studentEvents[studentName] = { color, count: 1 };
-            }
-
+        // 封装显示事件的函数
+        function displayEvent(studentName, timePeriod, eventText, color) {
             const eventDisplay = document.createElement('p');
             eventDisplay.textContent = `${studentName}: ${eventText}`;
             eventDisplay.style.color = color;
@@ -192,14 +218,60 @@
                     document.getElementById('post-1978-events').appendChild(eventDisplay);
                     break;
             }
-            
-            totalSubmissions++;
-            if (studentEvents[studentName].count >= 3 && totalSubmissions >= 5) {
-                document.getElementById('pass-card').style.display = 'block';
+        }
+
+        // 更新通关名单显示
+        function updatePassList() {
+            const passListElement = document.getElementById('pass-list');
+            let listContent = '恭喜以下同学通关：\n';
+            passedStudents.forEach((student, index) => {
+                listContent += `${index + 1}.${student}\n`;
+            });
+            passListElement.innerHTML = `<p>${listContent.replace(/\n/g, '<br>')}</p>`;
+        }
+
+        document.getElementById('event-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const studentName = document.getElementById('student-name').value.trim();
+            const timePeriod = document.getElementById('time-period').value;
+            const eventText = document.getElementById('event').value.trim();
+
+            // 检查输入长度
+            if (studentName.length === 0 || eventText.length === 0) {
+                alert('姓名和事件不能为空，请重新输入！');
+                return;
             }
-            
+
+            // 检查重复内容
+            if (isDuplicate(studentName, eventText)) {
+                alert('您输入的内容已存在，请输入不同的内容！');
+                return;
+            }
+
+            // 为同一学生分配相同颜色
+            let color;
+            if (studentEvents[studentName]) {
+                color = studentEvents[studentName].color;
+                studentEvents[studentName].count++;
+            } else {
+                color = colors[Math.floor(Math.random() * colors.length)];
+                studentEvents[studentName] = { color, count: 1 };
+            }
+
+            // 显示事件
+            displayEvent(studentName, timePeriod, eventText, color);
+
+            totalSubmissions++;
+            if (studentEvents[studentName].count >= 3 && totalSubmissions >= 5 &&!passedStudents.includes(studentName)) {
+                document.getElementById('pass-card').style.display = 'block';
+                passedStudents.push(studentName);
+                updatePassList();
+            }
+
             document.getElementById('event-form').reset();
         });
     </script>
 </body>
+
 </html>
