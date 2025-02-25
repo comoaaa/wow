@@ -108,17 +108,17 @@
         .control-panel form input,
         .control-panel form select {
             margin-bottom: 15px;
-            width: 70%; /* 设置输入框和选择框宽度适中 */
-            align-self: center; /* 让输入框和选择框居中 */
-            padding: 10px; /* 增加内边距，使输入内容更舒适 */
-            box-sizing: border-box; /* 确保内边距不会影响宽度 */
+            width: 70%;
+            align-self: center;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .control-panel form button {
-            width: 40%; /* 设置按钮宽度适中 */
-            align-self: center; /* 让按钮居中 */
-            padding: 12px; /* 增加按钮内边距，增大按钮大小 */
-            font-size: 16px; /* 增大按钮文字大小 */
+            width: 40%;
+            align-self: center;
+            padding: 12px;
+            font-size: 16px;
         }
 
         .pass-card {
@@ -147,6 +147,14 @@
             padding: 10px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 媒体查询，当屏幕宽度小于 600px 时调整样式 */
+        @media (max-width: 600px) {
+            .passed-students {
+                position: static;
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
