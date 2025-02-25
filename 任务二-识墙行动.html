@@ -99,6 +99,28 @@
             margin-bottom: 40px;
         }
 
+        /* 修改表单布局 */
+        .control-panel form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-panel form input,
+        .control-panel form select {
+            margin-bottom: 15px;
+            width: 70%; /* 设置输入框和选择框宽度适中 */
+            align-self: center; /* 让输入框和选择框居中 */
+            padding: 10px; /* 增加内边距，使输入内容更舒适 */
+            box-sizing: border-box; /* 确保内边距不会影响宽度 */
+        }
+
+        .control-panel form button {
+            width: 40%; /* 设置按钮宽度适中 */
+            align-self: center; /* 让按钮居中 */
+            padding: 12px; /* 增加按钮内边距，增大按钮大小 */
+            font-size: 16px; /* 增大按钮文字大小 */
+        }
+
         .pass-card {
             position: fixed;
             top: 50%;
