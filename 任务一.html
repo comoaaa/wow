@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>让改革创新成为青春远航的动力 之 任务一</title>
+    <style>
+        body {
+            font-family: "楷体", "KaiTi", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #87CEEB;
+            position: relative;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1E3799;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .event {
+            width: 30%;
+            background-color: inherit;
+            transition: transform 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .timeline {
+                flex-direction: column;
+            }
+            .event {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+
+        .event:hover {
+            transform: scale(1.02);
+        }
+
+        .content {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .content h2 {
+            margin-top: 0;
+            color: #1E3799;
+            border-bottom: 2px solid #87CEEB;
+            padding-bottom: 5px;
+        }
+
+        .content p {
+            margin: 0;
+            color: #666;
+        }
+
+        .form-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 6px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #1E3799;
+        }
+
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #1E3799;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #4A69BD;
+        }
+
+        .progress-info {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .pass-card {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #FFD700;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .pass-list {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            font-size: 1.2em;
+            max-width: 300px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>让改革创新成为青春远航的动力</h1>
+        <div class="progress-info">
+            <div>总提交数: <span id="total-submissions">0</span></div>
+            <div>你的提交数: <span id="student-submissions">0</span></div>
+        </div>
+        <div class="timeline">
+            <div class="event">
+                <div class="content">
+                    <h2>新中国成立前</h2>
+                    <div id="pre-1949-events"></div>
+                </div>
+            </div>
+            <div class="event">
+                <div class="content">
+                    <h2>改革开放前</h2>
+                    <div id="pre-1978-events"></div>
+                </div>
+            </div>
+            <div class="event">
+                <div class="content">
+                    <h2>改革开放后</h2>
+                    <div id="post-1978-events"></div>
+                </div>
+            </div>
+        </div>
+        <div class="form-container">
+            <h2>任务一：获取礼物密钥卡</h2>
+            <form id="event-form">
+                <label for="student-name">学生姓名：</label>
+                <input type="text" id="student-name" name="student-name" required maxlength="20" placeholder="请输入真实姓名">
+
+                <label for="time-period">选择时间节点：</label>
+                <select id="time-period" name="time-period" required>
+                    <option value="pre-1949">新中国成立前</option>
+                    <option value="pre-1978">改革开放前</option>
+                    <option value="post-1978">改革开放后</option>
+                </select>
+
+                <label for="event">历史事件：</label>
+                <input type="text" id="event" name="event" required maxlength="100" placeholder="例如：五四运动">
+
+                <button type="submit">提交</button>
+            </form>
+        </div>
+        <div class="pass-card" id="pass-card">
+            <h2>🎉 恭喜你！</h2>
+            <p>成功解锁任务一，获得通关密钥！</p>
+        </div>
+    </div>
+    <div class="pass-list" id="pass-list">
+        <p>🏆 通关名单：</p>
+    </div>
+
+    <script>
+        const studentEvents = {};
+        let totalSubmissions = 0;
+        const passedStudents = [];
+
+        function getRandomColor() {
+            return `hsl(${Math.random() * 360}, 70%, 60%)`;
+        }
+
+        function updateProgress(studentName) {
+            document.getElementById('total-submissions').textContent = totalSubmissions;
+            const studentCount = studentName ? (studentEvents[studentName]?.count || 0) : 0;
+            document.getElementById('student-submissions').textContent = studentCount;
+        }
+
+        function isDuplicate(studentName, eventText) {
+            return Array.from(document.querySelectorAll('#pre-1949-events p, #pre-1978-events p, #post-1978-events p'))
+                .some(p => p.textContent === `${studentName}: ${eventText}`);
+        }
+
+        function displayEvent(studentName, timePeriod, eventText, color) {
+            const eventDisplay = document.createElement('p');
+            eventDisplay.textContent = `${studentName}: ${eventText}`;
+            eventDisplay.style.color = color;
+            eventDisplay.style.margin = '5px 0';
+            document.getElementById(`${timePeriod}-events`).appendChild(eventDisplay);
+        }
+
+        function updatePassList() {
+            const passListElement = document.getElementById('pass-list');
+            passListElement.style.display = passedStudents.length > 0 ? 'block' : 'none';
+            passListElement.innerHTML = `<p>🏆 通关名单：</p>
+                ${passedStudents.map((s, i) => `<p>${i + 1}. ${s}</p>`).join('')}`;
+        }
+
+        document.getElementById('event-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const studentName = document.getElementById('student-name').value.trim();
+            const timePeriod = document.getElementById('time-period').value;
+            const eventText = document.getElementById('event').value.trim();
+
+            if (!studentName || !eventText) {
+                alert('请完整填写姓名和事件内容');
+                return;
+            }
+
+            if (isDuplicate(studentName, eventText)) {
+                alert('请勿重复提交相同内容');
+                return;
+            }
+
+            let color;
+            if (studentEvents[studentName]) {
+                color = studentEvents[studentName].color;
+                studentEvents[studentName].count++;
+            } else {
+                color = getRandomColor();
+                studentEvents[studentName] = { color, count: 1 };
+            }
+
+            displayEvent(studentName, timePeriod, eventText, color);
+            totalSubmissions++;
+            updateProgress(studentName);
+
+            if (studentEvents[studentName].count >= 3 && totalSubmissions >= 5 && !passedStudents.includes(studentName)) {
+                document.getElementById('pass-card').style.display = 'block';
+                passedStudents.push(studentName);
+                updatePassList();
+              
+                setTimeout(() => {
+                    document.getElementById('pass-card').style.display = 'none';
+                }, 3000);
+            }
+
+            document.getElementById('event-form').reset();
+        });
+    </script>
+</body>
+</html>
