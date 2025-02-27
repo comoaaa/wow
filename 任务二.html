@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>改革创新·青春远航 - 识墙行动</title>
+    <style>
+        :root {
+            --wall-color: rgba(128, 128, 128, 0.3);
+            --brick-colors: #FFB6C1, #87CEFA, #98FB98, #DDA0DD;
+        }
+
+        body {
+            font-family: "楷体", "KaiTi", sans-serif;
+            background: linear-gradient(150deg, #87CEEB 0%, #E0F6FF 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1E3799;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .wall-system {
+            display: flex;
+            gap: 10px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .wall-column {
+            perspective: 1000px;
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+            min-height: 600px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .brick {
+            background: var(--brick-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            margin: 8px 0;
+            transform-style: preserve-3d;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .brick:hover {
+            transform: translateY(-3px);
+        }
+
+        .brick p {
+            margin: 0;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .wall-label {
+            text-align: center;
+            font-size: 20px;
+            color: #1E3799;
+            margin: 15px 0;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px;
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: center;
+        }
+
+        .form-item input,
+        .form-item select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button[type="submit"] {
+            background: #1E3799;
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background: #4A69BD;
+            transform: translateY(-2px);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+        }
+
+        .pass-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: gold;
+            padding: 30px 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 100;
+        }
+
+        .pass-card.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .passed-students {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .wall-column {
+                flex: 1 1 100%;
+            }
+          
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>改革创新·青春远航 - 识墙行动</h1>
+
+        <div class="progress-info">
+            <div>总挑战数: <span id="total-challenges">0</span></div>
+            <div>我的贡献: <span id="my-contributions">0</span></div>
+        </div>
+
+        <div class="wall-system">
+            <div class="wall-column">
+                <div class="wall-label">人类文明之墙</div>
+                <div id="human-wall"></div>
+            </div>
+            <div class="wall-column">
+                <div class="wall-label">民族复兴之墙</div>
+                <div id="chinese-wall"></div>
+            </div>
+            <div class="wall-column">
+                <div class="wall-label">青年发展之墙</div>
+                <div id="youth-wall"></div>
+            </div>
+            <div class="wall-column">
+                <div class="wall-label">专业创新之墙</div>
+                <div id="major-wall"></div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <h2>🔍 识墙行动</h2>
+            <form id="brick-form" class="form-grid">
+                <div class="form-item">
+                    <input type="text" id="student-name" placeholder="你的姓名" required>
+                </div>
+                <div class="form-item">
+                    <select id="category" required>
+                        <option value="">选择领域</option>
+                        <option value="human">人类文明</option>
+                        <option value="chinese">民族复兴</option>
+                        <option value="youth">青年发展</option>
+                        <option value="major">专业创新</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <input type="text" id="challenge" placeholder="发现的具体挑战" required>
+                </div>
+                <button type="submit">提交挑战</button>
+            </form>
+        </div>
+
+        <div class="pass-card" id="passCard">
+            <h2>🎉 慧眼密钥卡获取成功！</h2>
+            <p id="pass-student-name"></p>
+            <p>你已识破四面高墙，获得突破之力！</p>
+        </div>
+
+        <div class="passed-students" id="passedStudents">
+            <h3>🏅 已通关先锋</h3>
+            <ul id="student-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const walls = {
+            human: { element: document.getElementById('human-wall'), color: '#FFB6C1', count: 0 },
+            chinese: { element: document.getElementById('chinese-wall'), color: '#87CEFA', count: 0 },
+            youth: { element: document.getElementById('youth-wall'), color: '#98FB98', count: 0 },
+            major: { element: document.getElementById('major-wall'), color: '#DDA0DD', count: 0 }
+        };
+
+        const challenges = new Map();
+        const studentData = new Map();
+        let totalChallenges = 0;
+
+        function updateProgress() {
+            document.getElementById('total-challenges').textContent = totalChallenges;
+            const currentStudent = document.getElementById('student-name').value.trim();
+            document.getElementById('my-contributions').textContent = 
+                currentStudent ? (studentData.get(currentStudent)?.count || 0) : 0;
+        }
+
+        function createBrick(studentName, challenge, category) {
+            const brick = document.createElement('div');
+            brick.className = 'brick';
+            brick.style.backgroundColor = walls[category].color;
+            brick.innerHTML = `
+                <p>
+                    <strong>${studentName}</strong><br>
+                    ${challenge}<br>
+                    <small>${new Date().toLocaleDateString()}</small>
+                </p>
+            `;
+            return brick;
+        }
+
+        document.getElementById('brick-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const studentName = document.getElementById('student-name').value.trim();
+            const category = document.getElementById('category').value;
+            const challenge = document.getElementById('challenge').value.trim();
+
+            if (!studentName || !category || !challenge) return;
+
+            const challengeKey = `${category}-${challenge}`;
+            if (challenges.has(challengeKey)) {
+                alert('该领域已存在相同挑战，期待新发现！');
+                return;
+            }
+
+            if (!studentData.has(studentName)) {
+                studentData.set(studentName, { count: 0, categories: new Set() });
+            }
+            const student = studentData.get(studentName);
+            student.count++;
+            student.categories.add(category);
+
+            walls[category].element.appendChild(createBrick(studentName, challenge, category));
+            challenges.set(challengeKey, true);
+            totalChallenges++;
+            updateProgress();
+
+            if (student.categories.size >= 3 && student.count >= 5) {
+                showPassCard(studentName);
+                updatePassList(studentName);
+            }
+
+            this.reset();
+        });
+
+        function showPassCard(studentName) {
+            const passCard = document.getElementById('passCard');
+            document.getElementById('pass-student-name').textContent = `先锋成员：${studentName}`;
+            passCard.classList.add('show');
+            setTimeout(() => passCard.classList.remove('show'), 1500);
+        }
+
+        function updatePassList(studentName) {
+            const list = document.getElementById('student-list');
+            if (!Array.from(list.children).some(li => li.textContent === studentName)) {
+                const li = document.createElement('li');
+                li.textContent = studentName;
+                list.appendChild(li);
+                document.getElementById('passedStudents').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
